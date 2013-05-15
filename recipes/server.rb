@@ -57,6 +57,13 @@ when "debian"
   include_recipe "postgresql::server_debian"
 end
 
+bash "Create postgresql dir" do
+  user 'postgres'
+  code "mkdir -p '#{node['postgresql']['dir']}'"
+  action :run
+  not_if "[ -d '#{node['postgresql']['dir']}' ]"
+end
+
 template "#{node['postgresql']['dir']}/postgresql.conf" do
   source "postgresql.conf.erb"
   owner "postgres"
