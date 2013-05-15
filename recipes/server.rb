@@ -61,6 +61,7 @@ directory node['postgresql']['dir'] do
   owner 'postgres'
   group 'postgres'
   mode 0750
+  recursive true
   action :create
   not_if "[ -d '#{node['postgresql']['dir']}' ]"
 end
