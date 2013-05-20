@@ -20,18 +20,11 @@
 
 include_recipe "postgresql::server"
 
-execute "backup postgresql pid file" do
-  command "cp #{node['postgresql']['config']['data_directory']}/postmaster.pid /tmp"
+service "postgresql" do
+  action :stop
 end
 
 include_recipe "fs_mount"
-
-execute "Restore postgresql pid file" do
-  command "cp /tmp/postmaster.pid #{node['postgresql']['config']['data_directory']}"
-end
-execute "Give correct owner to pid file" do
-  command "chown postgres:postgres #{node['postgresql']['config']['data_directory']}/postmaster.pid"
-end
 
 execute "fixup /var/lib/postgresql owner" do
   command "chown -Rf postgres:postgres /var/lib/postgresql"
@@ -39,5 +32,5 @@ execute "fixup /var/lib/postgresql owner" do
 end
 
 service "postgresql" do
-  action :restart
+  action :start
 end
