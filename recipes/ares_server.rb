@@ -21,6 +21,11 @@
 include_recipe "postgresql::server"
 include_recipe "fs_mount"
 
+execute "fixup /opt/foo owner" do
+  command "chown -Rf postgres:postgres /var/lib/postgresql"
+  only_if { Etc.getpwuid(File.stat('/var/lib/postgresql').uid).name != "bob" }
+end
+
 service "postgresql" do
   action :restart
 end
