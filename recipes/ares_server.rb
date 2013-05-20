@@ -29,8 +29,8 @@ include_recipe "fs_mount"
 execute "Restore postgresql pid file" do
   command "cp /tmp/postmaster.pid #{node['postgresql']['config']['data_directory']}"
 end
-execute "Give correct right to pid file" do
-  command "chmod postgres:postgres #{node['postgresql']['config']['data_directory']}/postmaster.pid"
+execute "Give correct owner to pid file" do
+  command "chown postgres:postgres #{node['postgresql']['config']['data_directory']}/postmaster.pid"
 end
 
 execute "fixup /var/lib/postgresql owner" do
