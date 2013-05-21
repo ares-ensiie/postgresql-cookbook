@@ -28,7 +28,7 @@ include_recipe "fs_mount"
 
 execute "fixup /var/lib/postgresql owner" do
   command "chown -Rf postgres:postgres /var/lib/postgresql"
-  only_if { Etc.getpwuid(File.stat('/var/lib/postgresql').uid).name != "postgres" }
+  only_if { Etc.getpwnam("postgres").uid != File.stat('/var/lib/postgresql').uid }
 end
 
 service "postgresql" do
